@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090710">
+<title>Drex Vex Store | Discover Your Style</title>
+<style>
+:root {
+  --bg:#090710; --panel:#151020; --purple:#8b5cf6;
+  --light:#c4a5ff; --text:#f8f5ff; --muted:#aaa1b8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:Arial, sans-serif}
+header{padding:20px 5%;display:flex;align-items:center;
+justify-content:space-between;border-bottom:1px solid #292036}
+.logo{font-size:22px;font-weight:800;letter-spacing:1px}
+.logo span{color:var(--purple)}
+nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:13px}
+.hero{margin:22px 5%;padding:35px 25px;border-radius:22px;
+background:linear-gradient(125deg,#29134b,#100c1c 65%,#35145a)}
+.hero small{color:#d6bfff;letter-spacing:2px}
+.hero h1{font-size:34px;line-height:1.15;margin:15px 0}
+.hero p{color:#d0c4df;line-height:1.6;font-size:14px}
+.hero button,.buy{background:var(--purple);color:white;border:0;
+padding:13px 20px;border-radius:10px;font-weight:bold;cursor:pointer}
+.search{margin:25px 5%}
+.search input{width:100%;padding:15px;border-radius:12px;
+border:1px solid #352945;background:#151020;color:white;font-size:15px}
+.categories{display:flex;gap:10px;overflow:auto;padding:0 5% 20px}
+.categories button{white-space:nowrap;border:1px solid #39294e;
+background:#171020;color:#ddd;padding:10px 16px;border-radius:30px}
+.categories button.active{background:var(--purple);color:white}
+.section{padding:10px 5%}
+.section h2{font-size:21px}
+.section p{color:var(--muted);font-size:13px}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.product{background:var(--panel);border:1px solid #292036;
+border-radius:15px;overflow:hidden}
+.product img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#21192b}
+.details{padding:12px}
+.details h3{font-size:14px;margin:0 0 8px}
+.price{font-size:17px;font-weight:bold}
+.rating{font-size:12px;color:#e9c76c;margin:8px 0}
+.buy{width:100%;margin-top:9px;padding:11px}
+.tag{font-size:10px;color:#d7bdff;background:#34204d;
+padding:5px 8px;border-radius:20px}
+footer{margin-top:45px;padding:28px 5%;background:#120d1b;
+color:var(--muted);font-size:12px;text-align:center;line-height:1.8}
+.empty{color:var(--muted);grid-column:1/-1;padding:25px 0}
+@media(min-width:700px){
+ .hero{padding:65px}.hero h1{font-size:48px}
+ .products{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">DREX <span>VEX</span></div>
+  <nav><a href="#home">Home</a><a href="#products">Shop</a></nav>
+</header>
+
+<section class="hero" id="home">
+  <small>WELCOME TO DREX VEX STORE</small>
+  <h1>Discover Your<br>Next Favourite.</h1>
+  <p>Explore trending finds, everyday essentials and handpicked deals — all in one place.</p>
+  <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+    Explore Products →
+  </button>
+</section>
+
+<div class="search">
+  <input id="search" type="search" placeholder="Search products..." oninput="renderProducts()">
+</div>
+
+<div class="categories" id="categories">
+  <button class="active" onclick="setCategory('All',this)">All</button>
+  <button onclick="setCategory('Fashion',this)">Fashion</button>
+  <button onclick="setCategory('Shoes',this)">Shoes</button>
+  <button onclick="setCategory('Accessories',this)">Accessories</button>
+  <button onclick="setCategory('Home',this)">Home</button>
+  <button onclick="setCategory('Other',this)">Other</button>
+</div>
+
+<section class="section" id="products">
+  <h2>Featured Products</h2>
+  <p>Handpicked finds worth checking out.</p>
+  <div class="products" id="productGrid"></div>
+</section>
+
+<footer>
+  <strong>DREX VEX STORE</strong><br>
+  Discover more. Shop smarter.<br>
+  Product purchases are completed on the seller's platform.
+  Prices and availability may change. Affiliate links may earn us a commission.
+</footer>
+
+<script>
+const products = [];
+let selectedCategory = 'All';
+
+function setCategory(category,button){
+  selectedCategory=category;
+  document.querySelectorAll('.categories button').forEach(b=>b.classList.remove('active'));
+  button.classList.add('active');
+  renderProducts();
+}
+
+function renderProducts(){
+  const query=document.getElementById('search').value.toLowerCase();
+  const grid=document.getElementById('productGrid');
+  const filtered=products.filter(p=>
+    (selectedCategory==='All'||p.category===selectedCategory) &&
+    p.name.toLowerCase().includes(query)
+  );
+  grid.innerHTML=filtered.length ? filtered.map(p=>`
+    <article class="product">
+      <img src="${p.image}" alt="${p.name}">
+      <div class="details">
+        <span class="tag">${p.category}</span>
+        <h3>${p.name}</h3>
+        <div class="price">₹${Number(p.price).toLocaleString('en-IN')}</div>
+        <div class="rating">${p.rating ? '★ '+p.rating : 'Explore product'}</div>
+        <button class="buy" onclick="buyProduct('${encodeURIComponent(p.link)}')">Buy Now ↗</button>
+      </div>
+    </article>`).join('') : '<div class="empty">No products yet. Your products will appear here once added.</div>';
+}
+
+function buyProduct(encodedLink){
+  const link=decodeURIComponent(encodedLink);
+  if(!link.startsWith('https://')&&!link.startsWith('http://')) return;
+  window.open(link,'_blank','noopener');
+}
+renderProducts();
+</script>
+</body>
+</html>
