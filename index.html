@@ -392,7 +392,7 @@ async function pushToGitHub() {
   try {
     const api = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + DATA_FILE;
     let sha = null;
-    const getRes = await fetch(api, { headers: { Authorization: "token " + token } });
+    const getRes = await fetch(api, { headers: { Authorization: "Bearer " + token } });
     if (getRes.ok) {
       const info = await getRes.json();
       sha = info.sha;
@@ -407,11 +407,14 @@ async function pushToGitHub() {
 
     const putRes = await fetch(api, {
       method: "PUT",
-      headers: { Authorization: "token " + token, "Content-Type": "application/json" },
+      headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
       body: JSON.stringify(bodyObj)
     });
 
-    if (!putRes.ok) throw new Error("Token rejected or invalid permissions.");
+    if (!putRes.ok) {
+      const errData = await putRes.json().catch(function() { return {}; });
+      throw new Error(errData.message || "HTTP " + putRes.status);
+    }
     status.textContent = "✅ Saved! Live store will refresh in ~30 seconds.";
     renderCategories();
     renderProducts();
