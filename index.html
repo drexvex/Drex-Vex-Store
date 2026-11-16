@@ -1,139 +1,407 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#090710">
-<title>Drex Vex Store | Discover Your Style</title>
+<title>Drex Vex Store — Luxury Curated Finds</title>
+<meta name="description" content="Discover curated luxury deals, fashion, electronics, and trending products at Drex Vex Store.">
 <style>
-:root {
-  --bg:#090710; --panel:#151020; --purple:#8b5cf6;
-  --light:#c4a5ff; --text:#f8f5ff; --muted:#aaa1b8;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);
-font-family:Arial, sans-serif}
-header{padding:20px 5%;display:flex;align-items:center;
-justify-content:space-between;border-bottom:1px solid #292036}
-.logo{font-size:22px;font-weight:800;letter-spacing:1px}
-.logo span{color:var(--purple)}
-nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:13px}
-.hero{margin:22px 5%;padding:35px 25px;border-radius:22px;
-background:linear-gradient(125deg,#29134b,#100c1c 65%,#35145a)}
-.hero small{color:#d6bfff;letter-spacing:2px}
-.hero h1{font-size:34px;line-height:1.15;margin:15px 0}
-.hero p{color:#d0c4df;line-height:1.6;font-size:14px}
-.hero button,.buy{background:var(--purple);color:white;border:0;
-padding:13px 20px;border-radius:10px;font-weight:bold;cursor:pointer}
-.search{margin:25px 5%}
-.search input{width:100%;padding:15px;border-radius:12px;
-border:1px solid #352945;background:#151020;color:white;font-size:15px}
-.categories{display:flex;gap:10px;overflow:auto;padding:0 5% 20px}
-.categories button{white-space:nowrap;border:1px solid #39294e;
-background:#171020;color:#ddd;padding:10px 16px;border-radius:30px}
-.categories button.active{background:var(--purple);color:white}
-.section{padding:10px 5%}
-.section h2{font-size:21px}
-.section p{color:var(--muted);font-size:13px}
-.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.product{background:var(--panel);border:1px solid #292036;
-border-radius:15px;overflow:hidden}
-.product img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#21192b}
-.details{padding:12px}
-.details h3{font-size:14px;margin:0 0 8px}
-.price{font-size:17px;font-weight:bold}
-.rating{font-size:12px;color:#e9c76c;margin:8px 0}
-.buy{width:100%;margin-top:9px;padding:11px}
-.tag{font-size:10px;color:#d7bdff;background:#34204d;
-padding:5px 8px;border-radius:20px}
-footer{margin-top:45px;padding:28px 5%;background:#120d1b;
-color:var(--muted);font-size:12px;text-align:center;line-height:1.8}
-.empty{color:var(--muted);grid-column:1/-1;padding:25px 0}
-@media(min-width:700px){
- .hero{padding:65px}.hero h1{font-size:48px}
- .products{grid-template-columns:repeat(4,minmax(0,1fr))}
-}
+  :root {
+    --bg: #07060b;
+    --surface: #110e1b;
+    --surface-2: #191428;
+    --border: rgba(168, 85, 247, 0.22);
+    --purple: #9333ea;
+    --purple-light: #c084fc;
+    --gold: #f59e0b;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --danger: #ef4444;
+    --success: #10b981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 80px; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(7, 6, 11, 0.88); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 4%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .brand { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .brand span { background: linear-gradient(135deg, #c084fc, #7e22ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .icon-btn {
+    background: var(--surface-2); border: 1px solid var(--border);
+    padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 0.85rem;
+    display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;
+  }
+  .icon-btn:hover { border-color: var(--purple-light); }
+  .badge-count { background: var(--purple); color: #fff; font-size: 0.7rem; padding: 1px 6px; border-radius: 99px; font-weight: 700; }
+
+  /* Search & Filter Bar */
+  .search-wrap { padding: 14px 4% 6px; position: relative; }
+  .search-box {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    padding: 12px 16px; border-radius: 14px; outline: none; font-size: 0.95rem;
+  }
+  .search-box:focus { border-color: var(--purple-light); box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2); }
+  .suggestions {
+    position: absolute; left: 4%; right: 4%; top: 62px; background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 12px; z-index: 30; display: none; overflow: hidden;
+  }
+  .suggestions div { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; font-size: 0.9rem; }
+  .suggestions div:hover { background: rgba(147, 51, 234, 0.2); }
+
+  /* Hero Banner */
+  .hero {
+    margin: 12px 4%; padding: 26px 22px; border-radius: 20px;
+    background: linear-gradient(135deg, #2e1065 0%, #110e1b 65%, #1e1b4b 100%);
+    border: 1px solid var(--border); position: relative; overflow: hidden;
+  }
+  .hero-tag { display: inline-block; background: rgba(192, 132, 252, 0.16); color: var(--purple-light); padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px; }
+  .hero h1 { font-size: 1.55rem; line-height: 1.25; margin-bottom: 8px; }
+  .hero p { color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; max-width: 480px; }
+  .btn-primary {
+    background: linear-gradient(135deg, #9333ea, #6b21a8); color: #fff; border: none;
+    padding: 10px 18px; border-radius: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4); }
+
+  /* Categories & Sort */
+  .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding: 12px 4%; scrollbar-width: none; }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-pill {
+    white-space: nowrap; background: var(--surface); border: 1px solid var(--border);
+    padding: 8px 14px; border-radius: 99px; font-size: 0.85rem; cursor: pointer; transition: 0.2s;
+  }
+  .cat-pill.active { background: var(--purple); border-color: var(--purple-light); font-weight: 700; }
+
+  .toolbar { display: flex; justify-content: space-between; align-items: center; padding: 6px 4% 12px; gap: 10px; }
+  .section-title { font-size: 1.1rem; font-weight: 700; }
+  .sort-select { background: var(--surface); border: 1px solid var(--border); padding: 7px 12px; border-radius: 10px; font-size: 0.82rem; outline: none; }
+
+  /* Product Grid */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 4%; }
+  @media(min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    overflow: hidden; display: flex; flex-direction: column; transition: 0.25s; position: relative;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--purple-light); }
+  .card-img-wrap { position: relative; aspect-ratio: 1/1; background: #161224; overflow: hidden; cursor: pointer; }
+  .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .discount-badge {
+    position: absolute; top: 8px; left: 8px; background: var(--purple); color: #fff;
+    font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+  }
+  .wish-btn {
+    position: absolute; top: 8px; right: 8px; background: rgba(7,6,11,0.75); border: 1px solid var(--border);
+    width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; font-size: 0.95rem;
+  }
+  .card-body { padding: 11px; display: flex; flex-direction: column; flex: 1; }
+  .card-cat { font-size: 0.7rem; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .card-title { font-size: 0.9rem; font-weight: 600; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+  .rating { font-size: 0.75rem; color: var(--gold); margin-bottom: 8px; }
+  .price-row { display: flex; align-items: baseline; gap: 6px; margin-top: auto; margin-bottom: 10px; }
+  .price { font-size: 1.05rem; font-weight: 800; color: #fff; }
+  .mrp { font-size: 0.78rem; color: var(--muted); text-decoration: line-through; }
+  .card-actions { display: flex; gap: 6px; }
+  .buy-btn {
+    flex: 1; background: linear-gradient(135deg, #9333ea, #7e22ce); color: #fff; border: none;
+    padding: 9px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; text-align: center;
+  }
+  .share-btn {
+    background: var(--surface-2); border: 1px solid var(--border); padding: 0 10px;
+    border-radius: 10px; cursor: pointer; font-size: 0.9rem;
+  }
+
+  /* Modal & Drawers */
+  .modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.82); backdrop-filter: blur(6px);
+    z-index: 60; display: none; align-items: flex-end; justify-content: center;
+  }
+  @media(min-width: 768px) { .modal { align-items: center; } }
+  .modal.open { display: flex; }
+  .modal-card {
+    background: var(--surface); border: 1px solid var(--border); width: 100%; max-width: 560px;
+    max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 20px;
+  }
+  @media(min-width: 768px) { .modal-card { border-radius: 22px; } }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .close-btn { background: var(--surface-2); border: 1px solid var(--border); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; }
+
+  /* Gallery in Detail */
+  .detail-main-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; background: #161224; margin-bottom: 10px; }
+  .thumb-row { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; }
+  .thumb-row img { width: 58px; height: 58px; object-fit: cover; border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+  .thumb-row img.active { border-color: var(--purple-light); }
+
+  /* Admin Dashboard */
+  .admin-panel { display: none; padding: 16px 4%; max-width: 900px; margin: 0 auto; }
+  .admin-panel.active { display: block; }
+  .admin-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-box { background: var(--surface-2); border: 1px solid var(--border); padding: 14px; border-radius: 12px; }
+  .stat-val { font-size: 1.4rem; font-weight: 800; color: var(--purple-light); }
+  .stat-lbl { font-size: 0.78rem; color: var(--muted); }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; }
+  .field input, .field select, .field textarea {
+    width: 100%; background: var(--surface-2); border: 1px solid var(--border);
+    padding: 10px 12px; border-radius: 10px; outline: none; font-size: 0.9rem;
+  }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pill-tag { font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+  .tag-aff { background: rgba(16, 185, 129, 0.18); color: #34d399; }
+  .tag-norm { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+
+  /* Footer & Info Pages */
+  footer { margin-top: 40px; padding: 24px 4%; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 0.82rem; }
+  .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-bottom: 12px; }
+  .footer-links button { background: none; border: none; color: var(--purple-light); cursor: pointer; font-size: 0.82rem; }
 </style>
 </head>
 <body>
+
 <header>
-  <div class="logo">DREX <span>VEX</span></div>
-  <nav><a href="#home">Home</a><a href="#products">Shop</a></nav>
+  <div class="brand" onclick="showStore()">✦ DREX <span>VEX</span></div>
+  <div class="header-actions">
+    <button class="icon-btn" onclick="openWishlist()">♡ <span class="badge-count" id="wishCount">0</span></button>
+    <button class="icon-btn" onclick="toggleAdmin()">⚙ Admin</button>
+  </div>
 </header>
 
-<section class="hero" id="home">
-  <small>WELCOME TO DREX VEX STORE</small>
-  <h1>Discover Your<br>Next Favourite.</h1>
-  <p>Explore trending finds, everyday essentials and handpicked deals — all in one place.</p>
-  <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-    Explore Products →
-  </button>
+<!-- STOREFRONT VIEW -->
+<main id="storeView">
+  <div class="search-wrap">
+    <input type="text" id="searchInput" class="search-box" placeholder="Search luxury fashion, gadgets, deals..." oninput="handleSearch(this.value)">
+    <div id="searchSuggestions" class="suggestions"></div>
+  </div>
+
+  <section class="hero" id="heroBanner">
+    <span class="hero-tag">✦ CURATED LUXURY DEALS</span>
+    <h1>Elevate Your Lifestyle For Less</h1>
+    <p>Handpicked trending products & exclusive Meesho deals verified daily for quality and value.</p>
+    <button class="btn-primary" onclick="filterCategory('Best Deals')">Explore Best Deals →</button>
+  </section>
+
+  <div class="cat-bar" id="categoryBar"></div>
+
+  <div class="toolbar">
+    <div class="section-title" id="gridHeading">All Products</div>
+    <select class="sort-select" id="sortSelect" onchange="renderProducts()">
+      <option value="featured">Sort: Featured</option>
+      <option value="popular">Sort: Popularity</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
+  </div>
+
+  <div class="grid" id="productGrid"></div>
+
+  <div id="recentSection" style="display:none; margin-top:28px;">
+    <div class="toolbar"><div class="section-title">Recently Viewed</div></div>
+    <div class="grid" id="recentGrid"></div>
+  </div>
+</main>
+
+<!-- PRIVATE ADMIN DASHBOARD -->
+<section id="adminView" class="admin-panel">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+    <h2>Owner Dashboard</h2>
+    <button class="icon-btn" onclick="showStore()">← Back to Store</button>
+  </div>
+
+  <!-- GitHub Sync Setup -->
+  <div class="admin-card" id="authCard">
+    <h3 style="margin-bottom:8px;">🔐 GitHub Auto-Save Connection</h3>
+    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:12px;">
+      Enter your GitHub Personal Access Token once so changes you make here save directly to your live website.
+    </p>
+    <div class="field">
+      <label>GitHub Token (repo scope)</label>
+      <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn-primary" onclick="saveToken()">Connect & Unlock</button>
+      <button class="icon-btn" onclick="clearToken()">Disconnect</button>
+    </div>
+    <p id="syncStatus" style="font-size:0.8rem; margin-top:8px; color:var(--purple-light);"></p>
+  </div>
+
+  <div id="adminControls" style="display:none;">
+    <!-- Analytics Overview -->
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-val" id="statViews">0</div><div class="stat-lbl">Store Visits (This Device)</div></div>
+      <div class="stat-box"><div class="stat-val" id="statClicks">0</div><div class="stat-lbl">Total Product Clicks</div></div>
+      <div class="stat-box"><div class="stat-val" id="statCtr">0%</div><div class="stat-lbl">Click-Through Rate</div></div>
+      <div class="stat-box"><div class="stat-val" id="statEarnings">₹0</div><div class="stat-lbl">Logged Meesho Earnings</div></div>
+    </div>
+
+    <!-- Meesho Earnings Manual Log -->
+    <div class="admin-card">
+      <h3 style="margin-bottom:10px;">💰 Meesho Earnings Report Log</h3>
+      <div class="row-2">
+        <div class="field"><label>Confirmed Orders</label><input type="number" id="earnOrders" placeholder="0"></div>
+        <div class="field"><label>Confirmed Earnings (₹)</label><input type="number" id="earnAmount" placeholder="0"></div>
+      </div>
+      <button class="btn-primary" onclick="logEarnings()">Update Earnings & Publish</button>
+    </div>
+
+    <!-- Add / Edit Product -->
+    <div class="admin-card">
+      <h3 style="margin-bottom:10px;" id="formTitle">➕ Add New Product</h3>
+      <input type="hidden" id="editProductId">
+      <div class="field"><label>Product Name *</label><input type="text" id="pName" placeholder="e.g., Luxury Oversized Streetwear Hoodie"></div>
+      <div class="row-2">
+        <div class="field"><label>Selling Price (₹) *</label><input type="number" id="pPrice" placeholder="499"></div>
+        <div class="field"><label>Original MRP (₹)</label><input type="number" id="pMrp" placeholder="999"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>Category</label><select id="pCat"></select></div>
+        <div class="field"><label>Rating (1 - 5)</label><input type="number" step="0.1" max="5" id="pRating" value="4.6"></div>
+      </div>
+      <div class="field">
+        <label>Normal Meesho Product URL *</label>
+        <input type="url" id="pNormalUrl" placeholder="https://www.meesho.com/...">
+      </div>
+      <div class="field">
+        <label>Affiliate Tracking URL (Used for Buy Now when provided)</label>
+        <input type="url" id="pAffUrl" placeholder="https://www.meesho.com/...?utm_source=affiliate...">
+      </div>
+      <div class="field">
+        <label>Upload Photos from Phone Gallery (Auto-compressed)</label>
+        <input type="file" id="pImages" accept="image/*" multiple onchange="handleImageFiles(this.files)">
+        <div id="uploadPreview" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
+      </div>
+      <div class="field"><label>Product Description</label><textarea id="pDesc" rows="3" placeholder="Fabric, fit, highlights..."></textarea></div>
+      <div style="display:flex; gap:14px; margin-bottom:14px; font-size:0.85rem;">
+        <label><input type="checkbox" id="pFeatured" checked> Featured</label>
+        <label><input type="checkbox" id="pPublished" checked> Published</label>
+      </div>
+      <button class="btn-primary" onclick="saveProduct()">Save & Publish to Store</button>
+    </div>
+
+    <!-- Category Manager -->
+    <div class="admin-card">
+      <h3 style="margin-bottom:10px;">🗂 Manage Categories</h3>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="newCatName" placeholder="New category name" style="flex:1; background:var(--surface-2); border:1px solid var(--border); padding:9px 12px; border-radius:10px;">
+        <button class="btn-primary" onclick="addCategory()">Add</button>
+      </div>
+    </div>
+
+    <!-- Manage Product List -->
+    <div class="admin-card">
+      <h3 style="margin-bottom:10px;">📦 Inventory & Link Status</h3>
+      <div id="adminProductList"></div>
+    </div>
+  </div>
 </section>
 
-<div class="search">
-  <input id="search" type="search" placeholder="Search products..." oninput="renderProducts()">
+<!-- PRODUCT DETAIL MODAL -->
+<div class="modal" id="detailModal">
+  <div class="modal-card" id="detailContent"></div>
 </div>
 
-<div class="categories" id="categories">
-  <button class="active" onclick="setCategory('All',this)">All</button>
-  <button onclick="setCategory('Fashion',this)">Fashion</button>
-  <button onclick="setCategory('Shoes',this)">Shoes</button>
-  <button onclick="setCategory('Accessories',this)">Accessories</button>
-  <button onclick="setCategory('Home',this)">Home</button>
-  <button onclick="setCategory('Other',this)">Other</button>
+<!-- INFO / LEGAL MODAL -->
+<div class="modal" id="infoModal">
+  <div class="modal-card" id="infoContent"></div>
 </div>
-
-<section class="section" id="products">
-  <h2>Featured Products</h2>
-  <p>Handpicked finds worth checking out.</p>
-  <div class="products" id="productGrid"></div>
-</section>
 
 <footer>
-  <strong>DREX VEX STORE</strong><br>
-  Discover more. Shop smarter.<br>
-  Product purchases are completed on the seller's platform.
-  Prices and availability may change. Affiliate links may earn us a commission.
+  <div class="footer-links">
+    <button onclick="openInfo('about')">About Us</button>
+    <button onclick="openInfo('disclosure')">Affiliate Disclosure</button>
+    <button onclick="openInfo('privacy')">Privacy Policy</button>
+    <button onclick="openInfo('terms')">Terms</button>
+    <button onclick="openInfo('contact')">Contact</button>
+  </div>
+  <p>© 2026 Drex Vex Store. Curated affiliate shopping destination.</p>
 </footer>
 
 <script>
-const products = [];
-let selectedCategory = 'All';
+const REPO_OWNER = "drexvex";
+const REPO_NAME = "Drex-Vex-Store";
+const DATA_FILE = "store.json";
 
-function setCategory(category,button){
-  selectedCategory=category;
-  document.querySelectorAll('.categories button').forEach(b=>b.classList.remove('active'));
-  button.classList.add('active');
+let storeData = {
+  categories: ["All", "Fashion", "Shoes", "Accessories", "Home and Living", "Beauty", "Electronics", "Trending Products", "Best Deals"],
+  products: [
+    {
+      id: "demo-1",
+      name: "Midnight Noir Luxury Analog Watch",
+      price: 549,
+      mrp: 1499,
+      category: "Accessories",
+      rating: 4.8,
+      normalUrl: "https://www.meesho.com",
+      affiliateUrl: "",
+      images: ["https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80"],
+      description: "Matte black stainless steel finish with scratch-resistant glass and water resistance.",
+      featured: true,
+      published: true,
+      clicks: 0
+    }
+  ],
+  earnings: { orders: 0, amount: 0 }
+};
+
+let activeCategory = "All";
+let uploadedBase64 = [];
+let wishlist = JSON.parse(localStorage.getItem("dv_wish") || "[]");
+let recent = JSON.parse(localStorage.getItem("dv_recent") || "[]");
+let localStats = JSON.parse(localStorage.getItem("dv_stats") || '{"views":0,"clicks":0}');
+
+// Track session view
+if (!sessionStorage.getItem("dv_visited")) {
+  localStats.views++;
+  localStorage.setItem("dv_stats", JSON.stringify(localStats));
+  sessionStorage.setItem("dv_visited", "1");
+}
+
+async function init() {
+  try {
+    const res = await fetch(`${DATA_FILE}?t=${Date.now()}`);
+    if (res.ok) {
+      const remote = await res.json();
+      if (remote && remote.products) storeData = remote;
+    }
+  } catch (e) { console.log("Using default catalog"); }
+  renderCategories();
+  renderProducts();
+  renderRecent();
+  updateWishCount();
+  checkSavedToken();
+}
+
+function getBuyLink(p) {
+  return (p.affiliateUrl && p.affiliateUrl.trim() !== "") ? p.affiliateUrl.trim() : p.normalUrl.trim();
+}
+
+function renderCategories() {
+  const bar = document.getElementById("categoryBar");
+  bar.innerHTML = storeData.categories.map(c =>
+    `<button class="cat-pill ${c === activeCategory ? 'active' : ''}" onclick="filterCategory('${c}')">${c}</button>`
+  ).join("");
+  const sel = document.getElementById("pCat");
+  if (sel) sel.innerHTML = storeData.categories.filter(c => c !== "All").map(c => `<option value="${c}">${c}</option>`).join("");
+}
+
+function filterCategory(cat) {
+  activeCategory = cat;
+  document.getElementById("gridHeading").textContent = cat === "All" ? "All Products" : cat;
+  renderCategories();
   renderProducts();
 }
 
-function renderProducts(){
-  const query=document.getElementById('search').value.toLowerCase();
-  const grid=document.getElementById('productGrid');
-  const filtered=products.filter(p=>
-    (selectedCategory==='All'||p.category===selectedCategory) &&
-    p.name.toLowerCase().includes(query)
-  );
-  grid.innerHTML=filtered.length ? filtered.map(p=>`
-    <article class="product">
-      <img src="${p.image}" alt="${p.name}">
-      <div class="details">
-        <span class="tag">${p.category}</span>
-        <h3>${p.name}</h3>
-        <div class="price">₹${Number(p.price).toLocaleString('en-IN')}</div>
-        <div class="rating">${p.rating ? '★ '+p.rating : 'Explore product'}</div>
-        <button class="buy" onclick="buyProduct('${encodeURIComponent(p.link)}')">Buy Now ↗</button>
-      </div>
-    </article>`).join('') : '<div class="empty">No products yet. Your products will appear here once added.</div>';
-}
-
-function buyProduct(encodedLink){
-  const link=decodeURIComponent(encodedLink);
-  if(!link.startsWith('https://')&&!link.startsWith('http://')) return;
-  window.open(link,'_blank','noopener');
-}
-renderProducts();
-</script>
-</body>
-</html>
+function handleSearch(q) {
+  const box = document.getElementById("searchSuggestions");
+  const term = q.trim().toLowerCase();
+  if (!term) { box.style.display = "none"; renderProducts(); return; }
+  const matches = storeData.products.filter(p => p.published &
